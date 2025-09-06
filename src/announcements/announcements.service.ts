@@ -1,3 +1,4 @@
+
 import { Injectable } from '@nestjs/common';
 
 export type Announcement = {
@@ -6,6 +7,7 @@ export type Announcement = {
   description?: string;
   status: 'active' | 'closed';
   createdAt: Date;
+  closedAt?: Date;   // <-- NEW FIELD
 };
 
 @Injectable()
@@ -35,6 +37,14 @@ export class AnnouncementsService {
     const announcement = this.announcements.find((a) => a.id === id);
     if (announcement) {
       announcement.status = status;
+
+      // ✅ Add closedAt timestamp if closed
+      if (status === 'closed') {
+        announcement.closedAt = new Date();
+      } else {
+        announcement.closedAt = undefined; // optional: reset if re-activated
+      }
+
       return announcement;
     }
     return null;
