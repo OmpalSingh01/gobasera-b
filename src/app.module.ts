@@ -17,7 +17,7 @@ import { ReactionsModule } from './reactions/reactions.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // makes process.env available globally
+    ConfigModule.forRoot({ isGlobal: true }), // make process.env available globally
     AnnouncementsModule,
     CommentsModule,
     ReactionsModule,
