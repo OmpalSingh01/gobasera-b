@@ -17,23 +17,18 @@
 // }
 // bootstrap();
 
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { AnnouncementsModule } from './announcements/announcements.module';
+import { CommentsModule } from './comments/comments.module';
+import { ReactionsModule } from './reactions/reactions.module';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
-
-  app.enableCors({
-    origin: [
-      configService.get('FRONTEND_DEV'),   // dev frontend
-      configService.get('FRONTEND_PROD'),  // prod frontend
-    ],
-  });
-
-  const port = configService.get('PORT') || 4000;
-  await app.listen(port, '0.0.0.0');
-  console.log(`🚀 Backend running on port ${port}`);
-}
-bootstrap();
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // ← reads .env automatically
+    AnnouncementsModule,
+    CommentsModule,
+    ReactionsModule,
+  ],
+})
+export class AppModule {}
